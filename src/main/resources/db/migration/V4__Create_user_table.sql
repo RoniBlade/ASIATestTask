@@ -1,0 +1,15 @@
+ALTER TABLE users RENAME COLUMN name TO username;
+
+ALTER TABLE users DROP COLUMN email;
+
+ALTER TABLE users ADD COLUMN password VARCHAR(255) NOT NULL;
+
+ALTER TABLE users ADD COLUMN role_temp VARCHAR(50) NOT NULL DEFAULT 'CLIENT';
+
+UPDATE users SET role_temp = CASE WHEN is_admin THEN 'ADMIN' ELSE 'CLIENT' END;
+
+ALTER TABLE users DROP COLUMN is_admin;
+
+ALTER TABLE users RENAME COLUMN role_temp TO role;
+
+ALTER TABLE users ADD CONSTRAINT unique_username UNIQUE (username);

@@ -23,5 +23,9 @@ public class AppointmentService {
         return appointmentRepository.findByUserId(userId);
     }
 
+    @Transactional
+    public Appointment save(Appointment appointment) {
+        return appointmentRepository.save(appointment);
+    }
 
 }

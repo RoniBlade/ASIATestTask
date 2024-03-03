@@ -2,6 +2,7 @@ package com.AISATask.services;
 
 import com.AISATask.models.CarWash;
 import com.AISATask.repos.CarWashRepository;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -28,6 +29,10 @@ public class CarWashService {
         return carWashRepository.findAll();
     }
 
+    public CarWash findById(Long id) {
 
+        return carWashRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Service not found"));
+
+    }
 
 }

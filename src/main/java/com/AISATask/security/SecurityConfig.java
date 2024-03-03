@@ -2,6 +2,7 @@ package com.AISATask.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.userdetails.User;
@@ -15,6 +16,7 @@ import static org.springframework.security.config.Customizer.withDefaults;
 
 @Configuration
 @EnableWebSecurity
+@EnableGlobalMethodSecurity(prePostEnabled = true) // Включаем поддержку аннотаций PreAuthorize/PostAuthorize
 public class SecurityConfig {
 
     @Bean
@@ -22,7 +24,7 @@ public class SecurityConfig {
         http
                 .authorizeHttpRequests((authz) -> authz
                         .requestMatchers("/appointments/**").hasRole("CLIENT")
-                        .requestMatchers("/carwashservices/**").hasRole("ADMIN")
+                        .requestMatchers("/services/**").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
                 .httpBasic(withDefaults())
@@ -32,16 +34,22 @@ public class SecurityConfig {
     }
 
     @Bean
-    public UserDetailsService userDetailsService() {
+    public UserDetailsService userDetailsService(PasswordEncoder passwordEncoder) {
         UserDetails client = User.builder()
                 .username("client")
-                .password(passwordEncoder().encode("client123"))
-                .roles("CLIENT")
+                .password(passwordEncoder.encode("client123"))
+                .roles("CLIENT","ADMIN")
                 .build();
+
+        System.out.println(passwordEncoder.encode("client123"));
+
+        System.out.println("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+
+        System.out.println(passwordEncoder.encode("admin123"));
 
         UserDetails admin = User.builder()
                 .username("admin")
-                .password(passwordEncoder().encode("admin123"))
+                .password(passwordEncoder.encode("admin123"))
                 .roles("ADMIN")
                 .build();
 
