@@ -25,6 +25,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests((authz) -> authz
                         .requestMatchers("/appointments/**").hasRole("CLIENT")
                         .requestMatchers("/services/**").hasRole("ADMIN")
+                        .requestMatchers("/users/**").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
                 .httpBasic(withDefaults())
@@ -38,14 +39,8 @@ public class SecurityConfig {
         UserDetails client = User.builder()
                 .username("client")
                 .password(passwordEncoder.encode("client123"))
-                .roles("CLIENT","ADMIN")
+                .roles("CLIENT")
                 .build();
-
-        System.out.println(passwordEncoder.encode("client123"));
-
-        System.out.println("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
-
-        System.out.println(passwordEncoder.encode("admin123"));
 
         UserDetails admin = User.builder()
                 .username("admin")
